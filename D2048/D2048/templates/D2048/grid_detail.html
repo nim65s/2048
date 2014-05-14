@@ -1,0 +1,30 @@
+{% extends 'bootstrap3/bootstrap3.html' %}
+
+{% block bootstrap3_extra_head %}
+    <style>
+        tr td {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+
+{% block bootstrap3_content %}
+    <a href="{% url 'move' object.pk 1 %}">↑</a>,
+    <a href="{% url 'move' object.pk 2 %}">←</a>,
+    <a href="{% url 'move' object.pk 3 %}">↓</a>,
+    <a href="{% url 'move' object.pk 4 %}">→</a>,
+    <a href="{% url 'save' object.pk %}">Save</a>
+
+    <table>{% for line in object.get_grid.m %}
+        <tr>{% for cell in line %}
+            <td>{{ cell }}</td>
+        {% endfor %}</tr>
+    {% endfor %}</table>
+
+    {% if direction %}<span>{{ direction }}</span>{% endif %}
+    {% if slides %}<span>{{ slides }}</span>{% endif %}
+    {% if pop %}<span>{{ pop }}</span>{% endif %}
+{% endblock %}
