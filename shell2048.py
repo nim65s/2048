@@ -46,6 +46,10 @@ class Shell2048(Abstract2048):
         print('game over', self)
 
 if __name__ == '__main__':
-    g = Shell2048()
-    g.pop()
-    g.run()
+    try:
+        g = Shell2048(*sys.argv[1:])
+        g.pop()
+        g.run()
+    except ValueError:
+        print('usage: %s [height [width [goal [initial_score]]]]' % sys.argv[0])
+        sys.exit(1)

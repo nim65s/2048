@@ -7,11 +7,11 @@ from numpy import int64, zeros, dstack, where
 
 class Abstract2048:
     def __init__(self, height=4, width=4, goal=2048, score=0):
-        self.H = height
-        self.W = width
-        self.m = zeros((height, width), dtype=int64)
-        self.score = score
-        self.goal = goal
+        self.H = int(height)
+        self.W = int(width)
+        self.m = zeros((int(height), int(width)), dtype=int64)
+        self.score = int(score)
+        self.goal = int(goal)
 
     def pop(self):
         if self.m.min() == 0:
@@ -35,7 +35,7 @@ class Abstract2048:
         for i in range(self.H):
             for j in range(self.W - 1):
                 if self.m[i, - j - 2] == 0 and (self.m[i, - j - 2:] != 0).any():
-                    slide(i, - 2 - j)
+                    slide(i, self.W - 2 - j)
             for j in range(self.W - 1):
                 if self.m[i, j] == self.m[i, j + 1] != 0:
                     slide(i, j)
@@ -55,7 +55,7 @@ class Abstract2048:
         for j in range(self.W):
             for i in range(self.H - 1):
                 if self.m[- i - 2, j] == 0 and (self.m[- i - 2:, j] != 0).any():
-                    slide(- 2 - i, j)
+                    slide(self.H - 2 - i, j)
             for i in range(self.H - 1):
                 if self.m[i, j] == self.m[i + 1, j] != 0:
                     slide(i, j)
@@ -78,7 +78,7 @@ class Abstract2048:
                     slide(i, j + 1)
             for j in range(1, self.W):
                 if self.m[i, -j] == self.m[i, -j - 1] != 0:
-                    slide(i, -j)
+                    slide(i, self.W - j)
                     self.m[i, -j] *= 2
                     self.score += self.m[i, -j]
         return (slides, self.pop()) if slides else None
@@ -98,7 +98,7 @@ class Abstract2048:
                     slide(i + 1, j)
             for i in range(1, self.H):
                 if self.m[-i, j] == self.m[-i - 1, j] != 0:
-                    slide(-i, j)
+                    slide(self.H - i, j)
                     self.m[-i, j] *= 2
                     self.score += self.m[-i, j]
         return (slides, self.pop()) if slides else None
