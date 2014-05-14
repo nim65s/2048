@@ -34,10 +34,10 @@ class Abstract2048:
 
         for i in range(self.H):
             for j in range(self.W - 1):
-                if self.m[i, - j - 2] == 0:
+                if self.m[i, - j - 2] == 0 and (self.m[i, - j - 2:] != 0).any():
                     slide(i, - 2 - j)
             for j in range(self.W - 1):
-                if self.m[i, j] == self.m[i, j + 1]:
+                if self.m[i, j] == self.m[i, j + 1] != 0:
                     slide(i, j)
                     self.m[i, j] *= 2
                     self.score += self.m[i, j]
@@ -54,10 +54,10 @@ class Abstract2048:
 
         for j in range(self.W):
             for i in range(self.H - 1):
-                if self.m[- i - 2, j] == 0:
+                if self.m[- i - 2, j] == 0 and (self.m[- i - 2:, j] != 0).any():
                     slide(- 2 - i, j)
             for i in range(self.H - 1):
-                if self.m[i, j] == self.m[i + 1, j]:
+                if self.m[i, j] == self.m[i + 1, j] != 0:
                     slide(i, j)
                     self.m[i, j] *= 2
                     self.score += self.m[i, j]
@@ -74,10 +74,10 @@ class Abstract2048:
 
         for i in range(self.H):
             for j in range(1, self.W):
-                if self.m[i, j] == 0:
+                if self.m[i, j] == 0 and (self.m[i, :j] != 0).any():
                     slide(i, j + 1)
             for j in range(1, self.W):
-                if self.m[i, -j] == self.m[i, -j - 1]:
+                if self.m[i, -j] == self.m[i, -j - 1] != 0:
                     slide(i, -j)
                     self.m[i, -j] *= 2
                     self.score += self.m[i, -j]
@@ -94,10 +94,10 @@ class Abstract2048:
 
         for j in range(self.W):
             for i in range(1, self.H):
-                if self.m[i, j] == 0:
+                if self.m[i, j] == 0 and (self.m[:i, j] != 0).any():
                     slide(i + 1, j)
             for i in range(1, self.H):
-                if self.m[-i, j] == self.m[-i - 1, j]:
+                if self.m[-i, j] == self.m[-i - 1, j] != 0:
                     slide(-i, j)
                     self.m[-i, j] *= 2
                     self.score += self.m[-i, j]
