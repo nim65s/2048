@@ -23,32 +23,28 @@ class Shell2048(Abstract2048):
                 termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
             return ch
 
-        while self.m.max() < self.goal:
-            if self.m.min() > 0:
-                print('Try again ;)')
-                break
-            self.pop()
+        while not self.game_over():
             print(self)
             old = self.m.copy()
 
             while (old == self.m).all():
                 c = getchar()
                 if c == '4':
-                    self.left()
+                    print(self.left())
                 elif c == '8':
-                    self.up()
+                    print(self.up())
                 elif c == '6':
-                    self.right()
+                    print(self.right())
                 elif c in '25':
-                    self.down()
-                elif c == '0':  # cheating
-                    break
+                    print(self.down())
+                elif c == '0' and self.m.min() == 0:  # cheating
+                    print(self.pop())
                 elif c == 'q':
                     print('Y U QUIT ? :(')
                     return
-        else:
-            print('Game Over \o/')
+        print('game over', self)
 
 if __name__ == '__main__':
     g = Shell2048()
+    g.pop()
     g.run()
