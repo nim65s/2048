@@ -23,25 +23,24 @@ class Shell2048(Abstract2048):
                 termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
             return ch
 
+        print(self)
         while not self.game_over():
-            print(self)
-            old = self.m.copy()
-
-            while (old == self.m).all():
-                c = getchar()
-                if c == '4':
-                    print(self.left())
-                elif c == '8':
-                    print(self.up())
-                elif c == '6':
-                    print(self.right())
-                elif c in '25':
-                    print(self.down())
-                elif c == '0' and self.m.min() == 0:  # cheating
-                    print(self.pop())
-                elif c == 'q':
-                    print('Y U QUIT ? :(')
-                    return
+            c = getchar()
+            if c == '4':
+                slides = self.left()
+            elif c == '8':
+                slides = self.up()
+            elif c == '6':
+                slides = self.right()
+            elif c in '25':
+                slides = self.down()
+            elif c == '0' and self.m.min() == 0:  # cheating
+                slides = self.pop()
+            elif c == 'q':
+                print('Y U QUIT ? :(')
+                return
+            if slides:
+                print(self)
         print('game over', self)
 
 if __name__ == '__main__':
