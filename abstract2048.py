@@ -2,7 +2,7 @@
 
 from random import randrange
 
-from numpy import int64, zeros, dstack
+from numpy import int64, zeros, dstack, where
 
 
 class Abstract2048:
@@ -21,7 +21,7 @@ class Abstract2048:
                 if self.m[i, j] == 0:
                     break
             self.m[i, j] = 2 if randrange(0, 10) else 4
-        return i, j
+            return i, j
 
     def left(self):
         slides = []

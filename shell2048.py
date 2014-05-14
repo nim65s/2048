@@ -39,6 +39,8 @@ class Shell2048(Abstract2048):
             elif c == 'q':
                 print('Y U QUIT ? :(')
                 return
+            else:
+                slides = None
             if slides:
                 print(self)
         print('game over', self)
