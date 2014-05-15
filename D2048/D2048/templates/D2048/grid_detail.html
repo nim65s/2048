@@ -17,6 +17,11 @@
     <a href="{% url 'move' object.pk 3 %}">↓</a>,
     <a href="{% url 'move' object.pk 4 %}">→</a>,
     <a href="{% url 'save' object.pk %}">Save</a>
+    <br>
+    <a href="#" onclick="get(1)">↑</a>,
+    <a href="#" onclick="get(2)">←</a>,
+    <a href="#" onclick="get(3)">↓</a>,
+    <a href="#" onclick="get(4)">→</a>,
 
     <table>{% for line in object.get_grid.m %}
         <tr>{% for cell in line %}
@@ -24,7 +29,27 @@
         {% endfor %}</tr>
     {% endfor %}</table>
 
-    {% if direction %}<span>{{ direction }}</span>{% endif %}
-    {% if slides %}<span>{{ slides }}</span>{% endif %}
-    {% if pop %}<span>{{ pop }}</span>{% endif %}
+    <dl>
+        <dt>Primary Key</dt>
+        <dd id="pk">{{ object.pk }}</dd>
+        <dt>Direction</dt>
+        <dd id="direction">{% if direction %}{{ direction }}{% endif %}</dd>
+        <dt>Slides</dt>
+        <dd id="slides">{% if slides %}{{ slides }}{% endif %}</dd>
+        <dt>pop</dt>
+        <dd id="pop">{% if pop %}{{ pop }}{% endif %}</dd>
+    </dl>
+{% endblock %}
+
+{% block bootstrap3_extra_script %}
+    <script>
+        function get(direction) {
+            var url = '/move/' + $('#pk').text() + '/' + direction;
+            $.get(url, function(data) {
+                if (data.direction) { $('#direction').text(data.direction); }
+                if (data.slides) { $('#slides').text(data.slides); }
+                if (data.pop) { $('#pop').text(data.pop); }
+            });
+        }
+    </script>
 {% endblock %}
