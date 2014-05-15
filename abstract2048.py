@@ -21,7 +21,7 @@ class Abstract2048:
                 if self.m[i, j] == 0:
                     break
             self.m[i, j] = 2 if randrange(0, 10) else 4
-            return i, j
+            return i, j, int(self.m[i, j])
 
     def left(self):
         slides = []
@@ -41,7 +41,7 @@ class Abstract2048:
                     slide(i, j)
                     self.m[i, j] *= 2
                     self.score += self.m[i, j]
-        return (slides, self.pop()) if slides else None
+        return (slides, self.pop()) if slides else (None, None)
 
     def up(self):
         slides = []
@@ -61,7 +61,7 @@ class Abstract2048:
                     slide(i, j)
                     self.m[i, j] *= 2
                     self.score += self.m[i, j]
-        return (slides, self.pop()) if slides else None
+        return (slides, self.pop()) if slides else (None, None)
 
     def right(self):
         slides = []
@@ -81,7 +81,7 @@ class Abstract2048:
                     slide(i, self.W - j)
                     self.m[i, -j] *= 2
                     self.score += self.m[i, -j]
-        return (slides, self.pop()) if slides else None
+        return (slides, self.pop()) if slides else (None, None)
 
     def down(self):
         slides = []
@@ -101,7 +101,7 @@ class Abstract2048:
                     slide(self.H - i, j)
                     self.m[-i, j] *= 2
                     self.score += self.m[-i, j]
-        return (slides, self.pop()) if slides else None
+        return (slides, self.pop()) if slides else (None, None)
 
     def game_over(self):
         val = self.m.min()

@@ -1,5 +1,7 @@
+import json
+
 from django.core.exceptions import SuspiciousOperation
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView, CreateView, DetailView, UpdateView
 
 from .models import Grid, Cell
@@ -25,11 +27,11 @@ class GridMoveView(GridDetailView):
         if direction not in range(1, 5):
             raise SuspiciousOperation('bad direction: %i' % direction)
         self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        move_result = self.object.move(direction)
-        if move_result:
-            context['slides'], context['pop'] = move_result
-        context['direction'] = direction
+        context = {'direction': direction}
+        context['slides'], context['pop'] = self.object.move(direction)
+        if self.request.is_ajax():
+            return HttpResponse(json.dumps(context), {'content_type': 'application/json'})
+        context.update(self.get_context_data(object=self.object))
         return self.render_to_response(context)
 
 

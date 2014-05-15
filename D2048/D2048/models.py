@@ -49,17 +49,18 @@ class Grid(Model):
 
     def move(self, direction):
         grid = self.get_grid()
+        slides, pop = None, None
         if direction == UP:
-            move_results = grid.up()
+            slides, pop = grid.up()
         elif direction == LEFT:
-            move_results = grid.left()
+            slides, pop = grid.left()
         elif direction == DOWN:
-            move_results = grid.down()
+            slides, pop = grid.down()
         else:
-            move_results = grid.right()
-        if move_results:
+            slides, pop = grid.right()
+        if slides:
             self.save_grid(grid)
-        return move_results
+        return slides, pop
 
     def range_H(self):
         return range(self.H)
