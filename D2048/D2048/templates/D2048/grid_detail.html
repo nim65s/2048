@@ -2,12 +2,16 @@
 
 {% block bootstrap3_extra_head %}
     <style>
-        tr td {
+        .row { display: table-row; }
+        .cell {
+            border-radius: 5px;
+            display: table-cell;
             width: 50px;
             height: 50px;
             text-align: center;
             vertical-align: middle;
         }
+        .pop { background: rgba(0,0,255,0.5); }
     </style>
 {% endblock %}
 
@@ -23,11 +27,11 @@
     <a href="#" onclick="get(3)">↓</a>,
     <a href="#" onclick="get(4)">→</a>,
 
-    <table>{% for line in object.get_grid.m %}
-        <tr>{% for cell in line %}
-            <td>{{ cell }}</td>
-        {% endfor %}</tr>
-    {% endfor %}</table>
+    {% for line in object.get_grid.m %}
+        <div class="row" id="row-{{ forloop.counter0 }}">{% for cell in line %}
+            <div class="cell" id="cell-{{ forloop.counter0 }}">{{ cell }}</div>
+        {% endfor %}</div>
+    {% endfor %}
 
     <dl>
         <dt>Primary Key</dt>
@@ -48,7 +52,7 @@
             $.get(url, function(data) {
                 if (data.direction) { $('#direction').text(data.direction); }
                 if (data.slides) { $('#slides').text(data.slides); }
-                if (data.pop) { $('#pop').text(data.pop); }
+                if (data.pop) { $('.cell').removeClass('pop'); var cell = $('#row-' + data.pop[0] + ' #cell-' + data.pop[1]); cell.addClass('pop'); cell.text(data.pop[2]); }
             });
         }
     </script>
