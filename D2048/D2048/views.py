@@ -28,7 +28,7 @@ class GridMoveView(GridDetailView):
             raise SuspiciousOperation('bad direction: %i' % direction)
         self.object = self.get_object()
         context = {'direction': direction}
-        context['slides'], context['pop'] = self.object.move(direction)
+        context['slides'], context['pop'], context['next'] = self.object.move(direction)
         if self.request.is_ajax():
             return HttpResponse(json.dumps(context), {'content_type': 'application/json'})
         context.update(self.get_context_data(object=self.object))

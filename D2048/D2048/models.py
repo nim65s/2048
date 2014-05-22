@@ -60,7 +60,7 @@ class Grid(Model):
             slides, pop = grid.right()
         if slides:
             self.save_grid(grid)
-        return slides, pop
+        return slides, pop, grid.m.reshape((1, self.W * self.H)).tolist()[0]
 
     def range_H(self):
         return range(self.H)

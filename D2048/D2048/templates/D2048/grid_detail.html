@@ -2,36 +2,39 @@
 
 {% block bootstrap3_extra_head %}
     <style>
-        .row { display: table-row; }
         .cell {
             border-radius: 5px;
-            display: table-cell;
             width: 50px;
             height: 50px;
+            line-height: 50px;
             text-align: center;
             vertical-align: middle;
+            float: left;
+            margin: 3px;
+            background: #ffff7f;
         }
-        .pop { background: rgba(0,0,255,0.5); }
     </style>
 {% endblock %}
 
 {% block bootstrap3_content %}
-    <a href="{% url 'move' object.pk 1 %}">↑</a>,
-    <a href="{% url 'move' object.pk 2 %}">←</a>,
-    <a href="{% url 'move' object.pk 3 %}">↓</a>,
-    <a href="{% url 'move' object.pk 4 %}">→</a>,
+    <a href="{% url 'move' object.pk 1 %}">↑</a>
+    <a href="{% url 'move' object.pk 2 %}">←</a>
+    <a href="{% url 'move' object.pk 3 %}">↓</a>
+    <a href="{% url 'move' object.pk 4 %}">→</a>
     <a href="{% url 'save' object.pk %}">Save</a>
     <br>
-    <a href="#" onclick="get(1)">↑</a>,
-    <a href="#" onclick="get(2)">←</a>,
-    <a href="#" onclick="get(3)">↓</a>,
-    <a href="#" onclick="get(4)">→</a>,
+    <a href="#" onclick="get(1)">↑</a>
+    <a href="#" onclick="get(2)">←</a>
+    <a href="#" onclick="get(3)">↓</a>
+    <a href="#" onclick="get(4)">→</a>
 
-    {% for line in object.get_grid.m %}
-        <div class="row" id="row-{{ forloop.counter0 }}">{% for cell in line %}
-            <div class="cell" id="cell-{{ forloop.counter0 }}">{{ cell }}</div>
-        {% endfor %}</div>
-    {% endfor %}
+    <div id="table">
+        {% for line in object.get_grid.m %}
+            <div class="t-row" id="t-row-{{ forloop.counter0 }}">{% for cell in line %}
+                <div class="cell" id="cell-{{ forloop.counter0 }}">{{ cell }}</div>
+            {% endfor %}</div><div class="clearfix"></div>
+        {% endfor %}
+    </div>
 
     <dl>
         <dt>Primary Key</dt>
@@ -42,6 +45,8 @@
         <dd id="slides">{% if slides %}{{ slides }}{% endif %}</dd>
         <dt>pop</dt>
         <dd id="pop">{% if pop %}{{ pop }}{% endif %}</dd>
+        <dt>next</dt>
+        <dd id="next">{% if next %}{{ next }}{% endif %}</dd>
     </dl>
 {% endblock %}
 
@@ -50,9 +55,39 @@
         function get(direction) {
             var url = '/move/' + $('#pk').text() + '/' + direction;
             $.get(url, function(data) {
-                if (data.direction) { $('#direction').text(data.direction); }
-                if (data.slides) { $('#slides').text(data.slides); }
-                if (data.pop) { $('.cell').removeClass('pop'); var cell = $('#row-' + data.pop[0] + ' #cell-' + data.pop[1]); cell.addClass('pop'); cell.text(data.pop[2]); }
+                if (data.direction) {
+                    if (data.direction == 2) {
+                        if (data.slides) {
+                            data.slides.forEach(function(slide) {
+                                $('#t-row-' + slide[0]).append('<div class="cell" style="width: 0; margin: 3 0 3 0" id="tmp-' + slide[0] + '-' + slide[1] + '">0</div>');
+                                $('#tmp-' + slide[0] + '-' + slide[1]).animate({width: 50, margin: 3}, 400, 'linear');
+                                $('#t-row-' + slide[0] + ' #cell-' + slide[1]).animate({width: 0, margin: 0, padding: 0}, 400, 'linear', function() {
+                                    $(this).remove()
+                                });
+                            });
+                        }
+                        if (data.next) {
+                            setTimeout(function() {
+                                $('.cell').remove()
+                                for (var i = 0; i < {{ object.H }}; i++) {
+                                    for (var j = 0; j < {{ object.W }}; j++) {
+                                        $('#t-row-' + i).append('<div class="cell" id="cell-' + j + '">' + data.next[i * {{ object.W }} + j] + '</div>');
+                                    }
+                                }
+                            }, 400);
+                        }
+                    } else {
+                        $('#direction').text(data.direction);
+                        if (data.slides) { $('#slides').text(data.slides); }
+                    }
+                }
+                setTimeout(function() {
+                    if (data.pop) {
+                        $('#t-row-' + data.pop[0] + ' #cell-' + data.pop[1]).animate({ width: 56, height: 56, margin:0}, 100, 'linear', function() {
+                            $(this).animate({ width: 50, height: 50, margin: 3}, 100);
+                        })
+                    }
+                }, 400);
             });
         }
     </script>
