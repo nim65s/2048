@@ -2,9 +2,9 @@ import json
 
 from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import TemplateView, CreateView, DetailView, UpdateView
+from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 
-from .models import Grid, Cell
+from .models import Cell, Grid
 
 
 class GridCreateView(CreateView):
@@ -23,7 +23,7 @@ class GridDetailView(DetailView):
 
 class GridMoveView(GridDetailView):
     def get(self, request, *args, **kwargs):
-        direction = int(kwargs['dir'])
+        direction = int(request.GET['dir'])
         if direction not in range(1, 5):
             raise SuspiciousOperation('bad direction: %i' % direction)
         self.object = self.get_object()

@@ -2,7 +2,7 @@
 
 from random import randrange
 
-from numpy import int64, zeros, dstack, where
+from numpy import dstack, int64, where, zeros
 
 
 class Abstract2048:
@@ -67,7 +67,7 @@ class Abstract2048:
         slides = []
 
         def slide(i, j):
-            slides.append((i, j))
+            slides.append((i, j - 1))
             if j != 0:
                 self.m[i, 1:j] = self.m[i, :j - 1]
             self.m[i, 0] = 0
@@ -78,7 +78,7 @@ class Abstract2048:
                     slide(i, j + 1)
             for j in range(1, self.W):
                 if self.m[i, -j] == self.m[i, -j - 1] != 0:
-                    slide(i, self.W - j)
+                    slide(i, self.W - j + 1)
                     self.m[i, -j] *= 2
                     self.score += self.m[i, -j]
         return (slides, self.pop()) if slides else (None, None)
@@ -87,7 +87,7 @@ class Abstract2048:
         slides = []
 
         def slide(i, j):
-            slides.append((i, j))
+            slides.append((i - 1, j))
             if i != 0:
                 self.m[1:i, j] = self.m[:i - 1, j]
             self.m[0, j] = 0
@@ -98,7 +98,7 @@ class Abstract2048:
                     slide(i + 1, j)
             for i in range(1, self.H):
                 if self.m[-i, j] == self.m[-i - 1, j] != 0:
-                    slide(self.H - i, j)
+                    slide(self.H - i + 1, j)
                     self.m[-i, j] *= 2
                     self.score += self.m[-i, j]
         return (slides, self.pop()) if slides else (None, None)

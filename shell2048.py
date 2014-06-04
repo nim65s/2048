@@ -43,6 +43,7 @@ class Shell2048(Abstract2048):
                 slides = None
             if slides:
                 print(self)
+                print(slides)
         print('game over', self)
 
 if __name__ == '__main__':
